@@ -56,8 +56,19 @@ main = function() {
                 link.attr("href", "https://www.pivotaltracker.com/story/show/" + id.toString().replace("story_", ""));
                 link.attr("class", "link");
                 link.attr("target", "_blank");
+
+                var status = "";
+                if (story.hasClass("finished")) {
+                    status = "Finished ";
+                } else if (story.hasClass("started")) {
+                    status = "WIP ";
+                } else if (story.hasClass("delivered")) {
+                    status = "Delivered ";
+                }
+
                 var storyName = story.find("span.story_name").text();
                 link.append(storyName);
+                item.append(status);
                 item.append(link);
                 ul.append(item);
             });
