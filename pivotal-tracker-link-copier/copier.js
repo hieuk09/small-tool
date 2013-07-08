@@ -53,8 +53,9 @@ main = function() {
                 var link = $("<A>");
 
                 var id = story.attr("class").match(/story_\d+/);
-                link.attr("href", "https://www.pivotaltracker.com/story/show/" + id.toString().replace("story_"));
+                link.attr("href", "https://www.pivotaltracker.com/story/show/" + id.toString().replace("story_", ""));
                 link.attr("class", "link");
+                link.attr("target", "_blank");
                 var storyName = story.find("span.story_name").text();
                 link.append(storyName);
                 item.append(link);
