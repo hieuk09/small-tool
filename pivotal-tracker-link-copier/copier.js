@@ -21,7 +21,7 @@ main = function() {
 
     // setup styles
     var style = document.createElement('style');
-    style.innerHTML = ".prompt-box { position: absolute; border: 5px gray solid; padding: 10px 30px; border-radius: 5px; width: 500px; height: 300px; z-index: 99; background: white; text-align: left; "
+    style.innerHTML = ".prompt-box { position: absolute; border: 5px gray solid; padding: 10px 30px; border-radius: 5px; width: 500px; min-height: 300px; z-index: 99; background: white; text-align: left; "
     + "font-size: 12px; font-weight: normal; z-index: 1001; }"
     + ".copy-textarea { margin-top: 10px; width: 480px; height: 250px; }"
     + ".copy-button {float: left; width: 100px; height: 20px; border: 1px solid #FDA35D; border-radius: 5px; background: #FDA35D; margin-right: 10px; text-align: center; padding-top: 5px;"
