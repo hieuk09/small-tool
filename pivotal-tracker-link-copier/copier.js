@@ -80,6 +80,7 @@ main = function() {
             closeButton.attr("class", "close_btn");
             $promptBox.append(closeButton);
             closeButton.click(function() {
+                ancs.removeClass("selected");
                 $promptBox.remove();
             });
 
