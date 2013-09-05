@@ -80,7 +80,7 @@ main = function() {
             closeButton.attr("class", "close_btn");
             $promptBox.append(closeButton);
             closeButton.click(function() {
-                ancs.removeClass("selected");
+                $("#panels_control .deselect_all").click();
                 $promptBox.remove();
             });
 
