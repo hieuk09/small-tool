@@ -29,8 +29,9 @@ main = function() {
     + ".copy-button:hover { border-color: white; border-width: 3px; }"
     + ".close_btn { margin: 10px 20px 20px 0; }"
     + ".prompt-box a {color: #15c; text-decoration: underline;}"
-    + ".prompt-box ul li { list-style-type: disc; }";
-    + ".prompt-box .header { font-weight: bold; }";
+    + ".prompt-box ul li { list-style-type: disc; }"
+    + ".prompt-box .header { font-weight: bold; }"
+    + ".prompt-box div { padding: 10px 0; }";
     document.body.appendChild(style);
 
     // add the button
@@ -115,7 +116,7 @@ main = function() {
             var $contentBox = $("<div id='content'>");
 
             $promptBox.attr("class", "prompt-box");
-            $promptBox.css("top", ((document.body.clientHeight - 300) / 2) + "px");
+            $promptBox.css("top", ((document.body.clientHeight - 500) / 2) + "px");
             $promptBox.css("left", ((document.body.clientWidth - 500) / 2) + "px");
             $promptBox.append(closeButton);
             $contentBox.append(completeString);
@@ -125,11 +126,21 @@ main = function() {
             $contentBox.append($("<div class='header'>").text("What will the team do between now and next call/email regarding this project?"));
             $contentBox.append($toBeDoneUrl);
             $contentBox.append($("<div class='header'>").text("What impedes the team from performing their work as effectively as possible?"));
-            $contentBox.append($("<UL>").append($("LI").text("None")));
+            $contentBox.append($("<UL>").append($("<LI>").text("None")));
             $contentBox.append($("<div class='header'>").text("How much time have we spent today?"));
+            $contentBox.append($("<UL>").append($("<LI>").text("2 days")));
             $contentBox.append($("<div class='header'>").text("How much time have we spent this week?"));
+            var today = new Date();
+            var numberOfDays = today.getDay();
+            var daysSpentWeek = (numberOfDays * 2).toString() + " days"
+            $contentBox.append($("<UL>").append($("<LI>").text(daysSpentWeek)));
             $contentBox.append($("<div class='header'>").text("How much time have we spent this month?"));
+            numberOfDays = today.getDate();
+            var daysSpentWeek = Math.round(numberOfDays/7*5).toString() + " days"
+            $contentBox.append($("<UL>").append($("<LI>").text(daysSpentWeek)));
             $contentBox.append($("<div class='header'>").text("Our team today:"));
+            $contentBox.append($("<UL>").append($("<LI>").text("Hieu Nguyen (hieu.nguyen@eastagile.com)")));
+            $contentBox.append($("<UL>").append($("<LI>").text("Someone else (someone.else@eastagile.com)")));
             $contentBox.append($("<div>").text("Regards,"));
             $contentBox.append($("<div>").text("The East Agile Team"));
             $promptBox.append($contentBox);
@@ -149,4 +160,3 @@ main = function() {
 };
 
 unsafeWindow.addEventListener("load", main);
-
