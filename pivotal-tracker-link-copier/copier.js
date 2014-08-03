@@ -5,7 +5,7 @@
 // @description  Adds a button for quick copying from PT
 // @match      https://www.pivotaltracker.com/*/projects/*
 // @require    http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js
-// @copyright  2012+, Thien Lam
+// @copyright  2012+, Thien Lam, Hieu Nguyen
 // ==/UserScript==
 // access global variable 'app'
 
@@ -30,6 +30,7 @@ main = function() {
     + ".close_btn { margin: 10px 20px 20px 0; }"
     + ".prompt-box a {color: #15c; text-decoration: underline;}"
     + ".prompt-box ul li { list-style-type: disc; }";
+    + ".prompt-box .header { font-weight: bold; }";
     document.body.appendChild(style);
 
     // add the button
@@ -46,7 +47,7 @@ main = function() {
             var ancs = $("a.selector.selected");
             var completeString = ancs.length == 0 ? "No story selected" : "";
 
-            var ul = $("<UL>");
+            var $doneUrl = $("<UL>");
             ancs.map(function() {
                 var story = $(this).closest(".story");
                 var item = $("<LI>");
@@ -62,34 +63,76 @@ main = function() {
                     status = "Finished ";
                 } else if (story.hasClass("started")) {
                     status = "WIP ";
-                } else if (story.hasClass("delivered")) {
+                } else if (story.hasClass("delivered") || story.hasClass("accepted")) {
                     status = "Delivered ";
                 }
 
-                var storyName = story.find("span.story_name").text();
-                link.append(storyName);
-                item.append(status);
-                item.append(link);
-                ul.append(item);
+                if (status != "") {
+                    var storyName = story.find("span.story_name").text();
+                    link.append(storyName);
+                    item.append(status);
+                    item.append(link);
+                    $doneUrl.append(item);
+                }
             });
 
-            ul.attr("id", "content");
+            var $toBeDoneUrl = $("<UL>");
+
+            ancs.map(function() {
+                var story = $(this).closest(".story");
+                var item = $("<LI>");
+                var link = $("<A>");
+
+                var id = story.attr("class").match(/story_\d+/);
+                link.attr("href", "https://www.pivotaltracker.com/story/show/" + id.toString().replace("story_", ""));
+                link.attr("class", "link");
+                link.attr("target", "_blank");
+
+                var status = "";
+                var storyName = story.find("span.story_name").text();
+                if (story.hasClass("started")) {
+                    status = "Finished ";
+                    link.append(storyName);
+                    item.append(status);
+                    item.append(link);
+                    $toBeDoneUrl.append(item);
+                } else if (!story.hasClass("finished") && !story.hasClass("delivered") && !story.hasClass("accepted")) {
+                    link.append(storyName);
+                    item.append(link);
+                    $toBeDoneUrl.append(item);
+                }
+            });
 
             var closeButton = $("<button>");
             closeButton.text("Close");
             closeButton.attr("class", "close_btn");
-            $promptBox.append(closeButton);
             closeButton.click(function() {
                 $("#panels_control .deselect_all").click();
                 $promptBox.remove();
             });
 
-            $promptBox.append(completeString);
+            var $helloString = $("<div>").text("Hi, ");
+            var $contentBox = $("<div id='content'>");
 
             $promptBox.attr("class", "prompt-box");
             $promptBox.css("top", ((document.body.clientHeight - 300) / 2) + "px");
             $promptBox.css("left", ((document.body.clientWidth - 500) / 2) + "px");
-            $promptBox.append(ul);
+            $promptBox.append(closeButton);
+            $contentBox.append(completeString);
+            $contentBox.append($helloString);
+            $contentBox.append($("<div class='header'>").text("What has the team done since the last call/email regarding this project?"));
+            $contentBox.append($doneUrl);
+            $contentBox.append($("<div class='header'>").text("What will the team do between now and next call/email regarding this project?"));
+            $contentBox.append($toBeDoneUrl);
+            $contentBox.append($("<div class='header'>").text("What impedes the team from performing their work as effectively as possible?"));
+            $contentBox.append($("<UL>").append($("LI").text("None")));
+            $contentBox.append($("<div class='header'>").text("How much time have we spent today?"));
+            $contentBox.append($("<div class='header'>").text("How much time have we spent this week?"));
+            $contentBox.append($("<div class='header'>").text("How much time have we spent this month?"));
+            $contentBox.append($("<div class='header'>").text("Our team today:"));
+            $contentBox.append($("<div>").text("Regards,"));
+            $contentBox.append($("<div>").text("The East Agile Team"));
+            $promptBox.append($contentBox);
             $("body").append($promptBox);
 
             $promptBox.append($("<br>"));
@@ -106,3 +149,4 @@ main = function() {
 };
 
 unsafeWindow.addEventListener("load", main);
+
